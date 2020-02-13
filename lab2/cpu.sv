@@ -23,8 +23,9 @@ module cpu(
   logic [31:0] instruction_memory [0:12];
   logic [31:0] instruction;
 
+  // read txt file and store inst to instruction
   initial begin
-      // read txt file and store inst to code memory
+      
       $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/instruction_memory.txt", instruction_memory);
   end
 
@@ -33,9 +34,10 @@ module cpu(
   logic[4:0] write_register;
   logic[31:0] read_data1;
   logic[31:0] read_data2;
-  
+
+  // read txt file and store inst to register file
   initial begin
-      // read txt file and store inst to code memory
+
       $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/reg_file.txt", reg_file);
   end
 
