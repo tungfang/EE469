@@ -1,10 +1,10 @@
 def decimalToBinary(n):  
     return bin(n).replace("0b", "") 
 
-f = open('reg_file.txt', 'w')
+f = open('data_memory.txt', 'w')
 arr = []
 for i in range (0, 32):
-    num = decimalToBinary(i)
+    num = decimalToBinary(0)
     print(num)
     arr.append(num)
 

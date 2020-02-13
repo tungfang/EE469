@@ -1,3 +1,8 @@
+// Charles Tung Fang, Parsons Choi
+// 2020/2/12
+// EE 469 Lab 2
+// cpu module instantiate every other sub modules
+
 module cpu(
   input logic clk,
   input logic nreset,
@@ -19,33 +24,44 @@ module cpu(
   logic access_mem; // 2: accessing memory 
   logic write;      // 3: write back to logic or mem
   
-  // Instruction logic
+  // INSTRUCTION LOGICS
   logic [31:0] instruction_memory [0:12];
   logic [31:0] instruction;
 
   // read txt file and store inst to instruction
   initial begin
-      
       $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/instruction_memory.txt", instruction_memory);
   end
 
-  // register Logic
+  // REGISTER LOGICS
   logic [31:0] reg_file [0:31];
   logic[4:0] write_register;
   logic[31:0] read_data1;
   logic[31:0] read_data2;
 
-  // read txt file and store inst to register file
+  // read txt file and store 32 registers to register file
   initial begin
-
       $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/reg_file.txt", reg_file);
   end
 
+  // DATA MEMORY LOGICS
+  logic [31:0] data_mem [0:31];
+
+  // read txt file and store 32 data to data memory (initial to 0)
+  initial begin
+      $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
+  end
+
+  // CONTROL LOGICS
+  logic RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite;
+
+ 
   always @(posedge clk) begin
     if (nreset == 0) begin
       pc <= 0;
       counter <= 0;
     end
+    // Determine which cycle are we in currently 
     if (counter % 4 == 0) begin 
       fetch <= 1;
       read <= 0;
