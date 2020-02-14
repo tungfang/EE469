@@ -106,13 +106,13 @@ module control_testbench();
         end
 
     initial begin
-        instruction <= 000000;      @(posedge clk);
+        instruction <= 6'b000000;      @(posedge clk);
                                     @(posedge clk);
-        instruction <= 100011;      @(posedge clk);
+        instruction <= 6'b100011;      @(posedge clk);
                                     @(posedge clk);
-        instruction <= 101011;      @(posedge clk);
+        instruction <= 6'b101011;      @(posedge clk);
                                     @(posedge clk);
-        instruction <= 000100;      @(posedge clk);
+        instruction <= 6'b000100;      @(posedge clk);
                                     @(posedge clk); 
     $stop;
     end
