@@ -53,8 +53,7 @@ module cpu(
   end
 
   // CONTROL LOGICS
-  logic RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite;
-
+  logic RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite;
  
   always @(posedge clk) begin
     if (nreset == 0) begin
@@ -89,7 +88,8 @@ module cpu(
 
   fetch_instructions fetching(instruction_memory, pc, fetch, instruction);
   mux2_1 select_write_register(instruction[20:16], instruction[15:11], logicDst, write_register);
-  // read_register reading(clk, reg_file, instruction[25:21], instruction[20:16], write_register, write_data, logic_write, read_data1, read_data2);
+  control control_path(instruction[31:26], RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite);
+  read_register reading(clk, reg_file, instruction[25:21], instruction[20:16], write_register, write_data, RegWrite, read_data1, read_data2);
   
 
 
