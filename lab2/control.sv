@@ -1,7 +1,8 @@
-module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite);
+module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
     input logic [5:0] instruction;
-    output logic RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite;
-    
+    output logic RegDst, Branch, MemRead, MemtoReg,  MemWrite, ALUSrc, RegWrite;
+    output logic [1:0] ALUOp;
+
     logic R_format, lw, sw, beq;
 
     // checkouk which type is the instruction
@@ -44,8 +45,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, M
             MemRead = 0;
             MemWrite = 0;
             Branch = 0;
-            ALUOp1 = 1;
-            ALUOp2 = 0;
+            ALUOp[0] = 1;
+            ALUOp[1] = 0;
         end else if (lw) begin
             RegDst = 0;
             ALUSrc = 1;
@@ -54,8 +55,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, M
             MemRead = 1;
             MemWrite = 0;
             Branch = 0;
-            ALUOp1 = 0;
-            ALUOp2 = 0;
+            ALUOp[0] = 0;
+            ALUOp[1] = 0;
         end else if (sw) begin 
             RegDst = 1'bx;
             ALUSrc = 1;
@@ -64,8 +65,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, M
             MemRead = 0;
             MemWrite = 1;
             Branch = 0;
-            ALUOp1 = 0;
-            ALUOp2 = 0;
+            ALUOp[0] = 0;
+            ALUOp[1] = 0;
         end else if (beq) begin
             RegDst = 1'bx;
             ALUSrc = 0;
@@ -74,8 +75,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, M
             MemRead = 0;
             MemWrite = 0;
             Branch = 1;
-            ALUOp1 = 0;
-            ALUOp2 = 1;
+            ALUOp[0] = 0;
+            ALUOp[1] = 1;
         end else begin 
             RegDst = 0;
             ALUSrc = 0;
@@ -84,8 +85,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, M
             MemRead = 0;
             MemWrite = 0;
             Branch = 0;
-            ALUOp1 = 0;
-            ALUOp2 = 0;
+            ALUOp[0] = 0;
+            ALUOp[1] = 0;
         end
     end
         
@@ -94,9 +95,10 @@ endmodule
 module control_testbench();
     logic clk;
     logic [5:0] instruction;
-    logic RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite;
-        
-    control dut(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite);
+    logic RegDst, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
+    logic [1:0] ALUOp;    
+
+    control dut(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
 
     // Set up the clock
     parameter CLOCK_PERIOD=100;

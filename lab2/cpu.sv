@@ -18,6 +18,8 @@ module cpu(
 
   // Action Logics below
   logic [31:0] pc = 0;
+  logic [31:0] next_pc;
+  logic [31:0] pc_add4;
   logic [31:0] counter = 0;    // counter for determine state 
   logic fetch;      // 0: fetching 
   logic read;       // 1: reading
@@ -35,9 +37,10 @@ module cpu(
 
   // REGISTER LOGICS
   logic [31:0] reg_file [0:31];
-  logic[4:0] write_register;
-  logic[31:0] read_data1;
-  logic[31:0] read_data2;
+  logic [4:0] write_register;
+  logic [31:0] write_data;
+  logic [31:0] read_data1;
+  logic [31:0] read_data2;
 
   // read txt file and store 32 registers to register file
   initial begin
@@ -53,8 +56,18 @@ module cpu(
   end
 
   // CONTROL LOGICS
-  logic RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite;
+  logic RegDst, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
+  logic [1:0] ALUOp;
+  logic PCSrc, Zero;
  
+  // OTHER LOGICS
+  logic [31:0] extended_instruction;
+  logic [2:0] ALU_ctrl;
+  logic [31:0] ALU_in1;
+  logic [31:0] left_shifted_signal;
+  logic [31:0] ALU_add_result;
+  logic[31:0] ALU_regular_result;
+  
   always @(posedge clk) begin
     if (nreset == 0) begin
       pc <= 0;
@@ -81,16 +94,31 @@ module cpu(
       read <= 0;
       access_mem <= 0;
       write <= 1;
-      pc <= pc + 4; // still need to consider for branching
+      pc <= next_pc;
     end
     counter <= counter + 1;
   end
 
-  fetch_instructions fetching(instruction_memory, pc, fetch, instruction);
-  mux2_1 select_write_register(instruction[20:16], instruction[15:11], logicDst, write_register);
-  control control_path(instruction[31:26], RegDst, Branch, MemRead, MemtoReg, ALUOp1, ALUOp2, MemWrite, ALUSrc, RegWrite);
-  read_register reading(clk, reg_file, instruction[25:21], instruction[20:16], write_register, write_data, RegWrite, read_data1, read_data2);
+  fetch_instructions fetching(.instruction_memory(instruction_memory), .read_address(pc), .enable(fetch), .instruction(instruction));
+  mux2_1 select_write_register(.din0(instruction[20:16]), .din1(instruction[15:11]), .sel(logicDst), .mux_out(write_register));
+  control control_path(instruction[31:26], RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
+  read_register reading(.reg_file, .read_register1(instruction[25:21]), .read_register2(instruction[20:16]), .write_register, .write_data, .reg_write(RegWrite), .read_data1, .read_data2);
   
+  sign_extend sign_extending(.Din(instruction[15:0]), .Dout(extended_instruction));
+  ALU_control alu_ctrl(.function_code(instruction[5:0]), .ALUOp, .ALU_ctrl);
+  mux2_1 #(32) select_ALU_input(.din0(read_data2), .din1(extended_instruction), .sel(ALUSrc), .mux_out(ALU_in1));
+  
+  shifter shift_by2(.Din(extended_instruction), .direction(1'b0), .distance(6'b10), .Dout(left_shifted_signal));
+
+  // Process pc value and its update here
+  always_comb begin
+    pc_add4 = pc + 4;
+    ALU_add_result = left_shifted_signal + pc_add4;
+    PCSrc = Branch & Zero;
+  end
+
+  // update pc value
+  mux2_1 #(32) pc_update(.din0(pc_add4), .din1(ALU_add_result), .sel(PCSrc), .mux_out(next_pc));
 
 
   // Controls the LED on the board.
