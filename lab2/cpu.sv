@@ -69,7 +69,7 @@ module cpu(
   logic[31:0] ALU_regular_result;
   
   always @(posedge clk) begin
-    if (nreset == 0) begin
+    if (nreset == 1) begin
       pc <= 0;
       counter <= 0;
     end
