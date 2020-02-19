@@ -162,6 +162,9 @@ module cpu_testbench();
     @(posedge clk);
     @(posedge clk);
     @(posedge clk);
+    @(posedge clk);
+    @(posedge clk);
+    @(posedge clk);
   $stop;
   end
 
