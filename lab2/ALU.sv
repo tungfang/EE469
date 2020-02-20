@@ -1,8 +1,7 @@
-module alu #(parameter DATA_WIDTH = 32) (clk, bus_a, bus_b, alu_ctrl, out, zero, overflow, carryout, negative);
+module alu #(parameter DATA_WIDTH = 32) (bus_a, bus_b, alu_ctrl, out, zero, overflow, carryout, negative);
 
     `include "constants_32.sv"
 
-    input logic clk;
     input logic [DATA_WIDTH-1:0] bus_a, bus_b;
     input logic [2:0] alu_ctrl;
     output logic [DATA_WIDTH-1:0] out;

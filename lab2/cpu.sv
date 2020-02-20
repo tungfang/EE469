@@ -60,14 +60,20 @@ module cpu(
   logic [1:0] ALUOp;
   logic PCSrc, Zero;
  
-  // OTHER LOGICS
+  // ALU LOGICS
   logic [31:0] extended_instruction;
   logic [2:0] ALU_ctrl;
   logic [31:0] ALU_in1;
   logic [31:0] left_shifted_signal;
   logic [31:0] ALU_add_result;
-  logic[31:0] ALU_regular_result;
-  
+  logic [31:0] ALU_regular_result;
+  logic overflow, carryout, negative;
+
+  // Data MEMORY LOGICS
+  logic [31:0] data_memory [0:31];
+  logic [31:0] mem_read_data;
+
+
   always @(posedge clk) begin
     if (nreset == 1) begin
       pc <= 0;
@@ -107,6 +113,10 @@ module cpu(
   sign_extend sign_extending(.Din(instruction[15:0]), .Dout(extended_instruction));
   ALU_control alu_ctrl(.function_code(instruction[5:0]), .ALUOp, .ALU_ctrl);
   mux2_1 #(32) select_ALU_input(.din0(read_data2), .din1(extended_instruction), .sel(ALUSrc), .mux_out(ALU_in1));
+  
+
+  alu alu_operation(.bus_a(read_data1), .bus_b(ALU_in1), .alu_ctrl(ALUOp), .out(ALU_regular_result), .zero(Zero), .overflow, .carryout, .negative);
+  data_mem_32 memory(.mem_write(MemWrite), .mem_read(MemRead), .addr(ALU_regular_result), .write_data(read_data2), .read_data(mem_read_data), .data_memory);
   
   shifter shift_by2(.Din(extended_instruction), .direction(1'b0), .distance(6'b10), .Dout(left_shifted_signal));
 
