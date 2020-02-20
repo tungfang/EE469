@@ -8,7 +8,7 @@ module alu #(parameter DATA_WIDTH = 32) (clk, bus_a, bus_b, alu_ctrl, out, zero,
     output logic [DATA_WIDTH-1:0] out;
     output logic zero, overflow, carryout, negative;
 
-    logic [DATA_WIDIH:0] alu_mem;
+    logic [DATA_WIDTH:0] alu_mem;
 
     always_comb begin
         
