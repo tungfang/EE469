@@ -3,24 +3,20 @@
 // EE 469 Lab 2
 // fetch the instruction from instruction memory 
 
-module fetch_instructions(instruction_memory, read_address, enable, instruction);
+module fetch_instructions(read_address, enable, instruction);
     input logic [31:0] read_address;
     input logic enable;
     output logic [31:0] instruction;
-    input logic [31:0] instruction_memory [0:12];
+    logic [31:0] instruction_memory [0:12];
 
-    // input logic [32*13-1:0] instruction_memory; 
-    // logic [31:0] TD_instruction_memory [0:12];
+    // read txt file and store inst to instruction
+    initial begin
+        $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/instruction_memory.txt", instruction_memory);
+    end
 
     // integer i;
     always_comb begin
-      // for (i = 0; i < 13; i = i+1)
-      //   TD_instruction_memory[i] = instruction_memory[32*i +: 32];
-
-      // if (enable) instruction = TD_instruction_memory[read_address];
-	    if (enable) instruction = instruction_memory[read_address >> 2];
-      
-      // $display("Instruction: %b    ", instruction);
+	    if (enable) instruction = instruction_memory[read_address >> 2];      
     end
 
 endmodule

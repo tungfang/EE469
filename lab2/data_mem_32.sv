@@ -1,32 +1,35 @@
-module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (mem_write, mem_read, addr, write_data, read_data);
+module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (enable, mem_write, mem_read, addr, write_data, read_data);
 
 	`include "constants_32.sv"
-	
+	input logic enable;
 	input logic mem_write, mem_read;
 	input logic [ADDR_WIDTH - 1:0] addr;
 	input logic [DATA_WIDTH - 1:0] write_data;
 	output logic [DATA_WIDTH - 1:0] read_data;
 
-	logic [31:0] data_mem [0:31];
+	logic [31:0] data_mem [0:63];
 
 	// read txt file and store 32 data to data memory (initial to 0)
 	initial begin
 		$readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
+		$display("Write To DATA MEM");
 	end
 
 	logic [ADDR_WIDTH - 1:0] addr_aligned; // what is this for?
 
 	always_comb begin
-		// read
-		read_data = 'b0;
-		if (mem_read) begin
-			read_data = data_mem[addr];
-		end
-		// write
-		if (mem_write) begin
-			data_mem[addr] = write_data;
-			// $display("storing data...");
-			// $display("data_memory[%b]: %b", addr, data_memory[addr]);
+		if (enable) begin
+			// read
+			read_data = 'b0;
+			if (mem_read) begin
+				read_data = data_mem[addr];
+			end
+			// write
+			if (mem_write) begin
+				data_mem[addr] = write_data;
+				// $display("storing data...");
+				$display("data_memory[26]: %b", data_mem[26]);
+			end
 		end
 	end
 	
