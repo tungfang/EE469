@@ -54,11 +54,7 @@ module alu #(parameter DATA_WIDTH = 32) (bus_a, bus_b, alu_ctrl, out, zero, over
 
         negative = out[DATA_WIDTH-1];   // most significant bit for sign
         zero = out == 0;
+        // $display("ALU Result: %b", out);
     end
-
-
-
-
-
 
 endmodule 

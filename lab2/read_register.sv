@@ -3,8 +3,7 @@
 // EE 469 Lab 2
 // reading from the instruction to determine which register to process
 
-module read_register(reset, read_register1, read_register2, write_register, write_data, reg_write, read_data1, read_data2);
-    input logic reset;
+module read_register(read_register1, read_register2, write_register, write_data, reg_write, read_data1, read_data2);
     input logic [4:0] read_register1, read_register2, write_register;
     input logic reg_write;
     input logic [31:0] write_data;
@@ -23,11 +22,11 @@ module read_register(reset, read_register1, read_register2, write_register, writ
             // $display("reg_file[write_data]: %b ", reg_file[write_register]);
         end
         read_data1 = reg_file[read_register1];
-        $display("r1 addres: %b", read_register1);
-        $display("reg_file[read_register1] inside: %b ", reg_file[read_register1]);
+        // $display("r1 addres: %b", read_register1);
+        // $display("reg_file[read_register1] inside: %b ", reg_file[read_register1]);
         read_data2 = reg_file[read_register2]; 
-        $display("r2 addres: %b", read_register2);
-        $display("reg_file[read_register2]: %b ", reg_file[read_register2]);
+        // $display("r2 addres: %b", read_register2);
+        $display("reg_file[9]: %b ", reg_file[9]);
     end 
 endmodule
 
