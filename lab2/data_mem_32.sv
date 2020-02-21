@@ -1,4 +1,4 @@
-module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (mem_write, mem_read, addr, write_data, read_data, data_memory);
+module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (mem_write, mem_read, addr, write_data, read_data);
 
 	`include "constants_32.sv"
 	
@@ -6,9 +6,13 @@ module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (mem_
 	input logic [ADDR_WIDTH - 1:0] addr;
 	input logic [DATA_WIDTH - 1:0] write_data;
 	output logic [DATA_WIDTH - 1:0] read_data;
-	output logic [31:0] data_memory [0:31];
 
-	// logic [DATA_WIDTH - 1:0] mem [0:ADDR_WIDTH - 1];
+	logic [31:0] data_mem [0:31];
+
+	// read txt file and store 32 data to data memory (initial to 0)
+	initial begin
+		$readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
+	end
 
 	logic [ADDR_WIDTH - 1:0] addr_aligned; // what is this for?
 
@@ -16,15 +20,14 @@ module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (mem_
 		// read
 		read_data = 'b0;
 		if (mem_read) begin
-			read_data = data_memory[addr];
+			read_data = data_mem[addr];
 		end
 		// write
 		if (mem_write) begin
-			data_memory[addr] = write_data;
-			$display("storing data...");
-			$display("data_memory[%b]: %b", addr, data_memory[addr]);
+			data_mem[addr] = write_data;
+			// $display("storing data...");
+			// $display("data_memory[%b]: %b", addr, data_memory[addr]);
 		end
-
 	end
 	
 endmodule
@@ -35,9 +38,8 @@ module data_mem_32_testbench();
 	logic [31:0] addr;
 	logic [31:0] write_data;
 	logic [31:0] read_data;
-	logic [31:0] data_memory [0:31];
 
-	data_mem_32 dut(mem_write, mem_read, addr, write_data, read_data, data_memory);
+	data_mem_32 dut(mem_write, mem_read, addr, write_data, read_data);
 
 	// Set up the clock
     parameter CLOCK_PERIOD=100;

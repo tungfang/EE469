@@ -45,8 +45,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, 
             MemRead = 0;
             MemWrite = 0;
             Branch = 0;
-            ALUOp[0] = 1;
-            ALUOp[1] = 0;
+            ALUOp[0] = 0;
+            ALUOp[1] = 1;
         end else if (lw) begin
             RegDst = 0;
             ALUSrc = 1;
@@ -75,8 +75,8 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, 
             MemRead = 0;
             MemWrite = 0;
             Branch = 1;
-            ALUOp[0] = 0;
-            ALUOp[1] = 1;
+            ALUOp[0] = 1;
+            ALUOp[1] = 0;
         end else begin 
             RegDst = 0;
             ALUSrc = 0;

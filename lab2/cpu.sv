@@ -36,24 +36,11 @@ module cpu(
   end
 
   // REGISTER LOGICS
-  logic [31:0] reg_file [0:31];
+  // logic [31:0] reg_file [0:31];
   logic [4:0] write_register;
   logic [31:0] write_data;
   logic [31:0] read_data1;
   logic [31:0] read_data2;
-
-  // read txt file and store 32 registers to register file
-  initial begin
-      $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/reg_file.txt", reg_file);
-  end
-
-  // DATA MEMORY LOGICS
-  logic [31:0] data_mem [0:31];
-
-  // read txt file and store 32 data to data memory (initial to 0)
-  initial begin
-      $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
-  end
 
   // CONTROL LOGICS
   logic RegDst, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
@@ -70,7 +57,6 @@ module cpu(
   logic overflow, carryout, negative;
 
   // Data MEMORY LOGICS
-  logic [31:0] data_memory [0:31];
   logic [31:0] mem_read_data;
 
 
@@ -105,18 +91,21 @@ module cpu(
     counter <= counter + 1;
   end
 
+  // ok
   fetch_instructions fetching(.instruction_memory(instruction_memory), .read_address(pc), .enable(fetch), .instruction(instruction));
-  mux2_1 select_write_register(.din0(instruction[20:16]), .din1(instruction[15:11]), .sel(logicDst), .mux_out(write_register));
+  // ok
+  mux2_1 select_write_register(.din0(instruction[20:16]), .din1(instruction[15:11]), .sel(RegDst), .mux_out(write_register));
+  // ok
   control control_path(instruction[31:26], RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
-  read_register reading(.reg_file, .read_register1(instruction[25:21]), .read_register2(instruction[20:16]), .write_register, .write_data, .reg_write(RegWrite), .read_data1, .read_data2);
+  // 
+  read_register reading(.read_register1(instruction[25:21]), .read_register2(instruction[20:16]), .write_register(write_register), .write_data(write_data), .reg_write(RegWrite), .read_data1(read_data1), .read_data2(read_data2));
   
   sign_extend sign_extending(.Din(instruction[15:0]), .Dout(extended_instruction));
   ALU_control alu_ctrl(.function_code(instruction[5:0]), .ALUOp, .ALU_ctrl);
   mux2_1 #(32) select_ALU_input(.din0(read_data2), .din1(extended_instruction), .sel(ALUSrc), .mux_out(ALU_in1));
   
-
-  alu alu_operation(.bus_a(read_data1), .bus_b(ALU_in1), .alu_ctrl(ALUOp), .out(ALU_regular_result), .zero(Zero), .overflow, .carryout, .negative);
-  data_mem_32 memory(.mem_write(MemWrite), .mem_read(MemRead), .addr(ALU_regular_result), .write_data(read_data2), .read_data(mem_read_data), .data_memory);
+  alu alu_operation(.bus_a(read_data1), .bus_b(ALU_in1), .alu_ctrl(ALU_ctrl), .out(ALU_regular_result), .zero(Zero), .overflow, .carryout, .negative);
+  data_mem_32 memory(.mem_write(MemWrite), .mem_read(MemRead), .addr(ALU_regular_result), .write_data(read_data2), .read_data(mem_read_data));
   
   shifter shift_by2(.Din(extended_instruction), .direction(1'b0), .distance(6'b10), .Dout(left_shifted_signal));
 
@@ -125,6 +114,8 @@ module cpu(
     pc_add4 = pc + 4;
     ALU_add_result = left_shifted_signal + pc_add4;
     PCSrc = Branch & Zero;
+    $display("write register: %b", write_register);
+
   end
 
   // update pc value
@@ -169,8 +160,6 @@ module cpu_testbench();
   initial begin
     nreset <= 1; @(posedge clk);
     nreset <= 0; @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
     @(posedge clk);
     @(posedge clk);
     @(posedge clk);

@@ -20,7 +20,7 @@ module fetch_instructions(instruction_memory, read_address, enable, instruction)
       // if (enable) instruction = TD_instruction_memory[read_address];
 	    if (enable) instruction = instruction_memory[read_address >> 2];
       
-      $display("Instruction: %b    ", instruction);
+      // $display("Instruction: %b    ", instruction);
     end
 
 endmodule

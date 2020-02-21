@@ -9,34 +9,34 @@ module ALU_control(function_code, ALUOp, ALU_ctrl);
             // instruction operation: ldr/str word
             // desired ALU action: add
             ALU_ctrl = 3'b010;
-            $display("add");
+            // $display("add");
         end else if (ALUOp == 2'b01) begin 
             // instruction operation: branch eq
             // desired ALU action: subtract
             ALU_ctrl = 3'b110;
-            $display("subtract");
+            // $display("subtract");
         end else if (ALUOp == 2'b10) begin 
             // R-type
             if (function_code == 6'b100000) begin 
                 // add
                 ALU_ctrl = 3'b010;
-                $display("add");
+                // $display("add");
             end else if (function_code == 6'b100010) begin 
                 // subtract
                 ALU_ctrl = 3'b110;
-                $display("subtract");
+                // $display("subtract");
             end else if (function_code == 6'b100100) begin 
                 // AND
                 ALU_ctrl = 3'b000;
-                $display("AND");
+                // $display("AND");
             end else if (function_code == 6'b100101) begin 
                 // OR
                 ALU_ctrl = 3'b001;
-                $display("OR");
+                // $display("OR");
             end else if (function_code == 6'b101010) begin 
                 // slt
                 ALU_ctrl = 3'b111;
-                $display("slt");
+                // $display("slt");
             end else begin 
                 ALU_ctrl = 3'bxxx;
             end

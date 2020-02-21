@@ -3,21 +3,30 @@
 // EE 469 Lab 2
 // reading from the instruction to determine which register to process
 
-module read_register(reg_file, read_register1, read_register2, write_register, write_data, reg_write, read_data1, read_data2);
-    output logic [31:0] reg_file [0:31];
+module read_register(reset, read_register1, read_register2, write_register, write_data, reg_write, read_data1, read_data2);
+    input logic reset;
     input logic [4:0] read_register1, read_register2, write_register;
     input logic reg_write;
     input logic [31:0] write_data;
     output logic [31:0] read_data1, read_data2;
     
+    logic [31:0] reg_file [0:31];
+    
+    // read txt file and store 32 registers to register file
+    initial begin
+        $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/reg_file.txt", reg_file);
+    end
+
     always_comb begin
         if (reg_write) begin
             reg_file[write_register] = write_data;
-            $display("reg_file[write_data]: %b ", reg_file[write_register]);
+            // $display("reg_file[write_data]: %b ", reg_file[write_register]);
         end
         read_data1 = reg_file[read_register1];
-        $display("reg_file[read_register1]: %b ", reg_file[read_register1]);
+        $display("r1 addres: %b", read_register1);
+        $display("reg_file[read_register1] inside: %b ", reg_file[read_register1]);
         read_data2 = reg_file[read_register2]; 
+        $display("r2 addres: %b", read_register2);
         $display("reg_file[read_register2]: %b ", reg_file[read_register2]);
     end 
 endmodule
