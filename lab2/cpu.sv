@@ -132,8 +132,8 @@ module cpu(
   assign led = 1'b1;
 
   // These are how you communicate back to the serial port debugger.
-  assign debug_port1 = 8'h01;
-  assign debug_port2 = 8'h02;
+  assign debug_port1 = pc[7:0];
+  assign debug_port2 = {2'b00, instruction[31:26]};
   assign debug_port3 = 8'h03;
   assign debug_port4 = 8'h04;
   assign debug_port5 = 8'h05;

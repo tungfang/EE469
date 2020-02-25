@@ -1,11 +1,11 @@
 module cpsr_register(Branch, instruction, Zero, read_data1, PCSrc);
-    input logic Branch, Zero;
-    input logic [5:0] instruction;
-    input logic [31:0] read_data1;
-    output logic PCSrc;
+    input Branch, Zero;
+    input [5:0] instruction;
+    input [31:0] read_data1;
+    output reg PCSrc;
 
     // decides which condition code to use
-    always_comb begin
+    always @(*) begin
         if (Branch) begin
             case(instruction)
                 6'b000100:          // BEQ
