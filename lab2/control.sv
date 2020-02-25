@@ -58,9 +58,9 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, 
             ALUOp[0] = 0;
             ALUOp[1] = 0;
         end else if (sw) begin 
-            RegDst = 1'bx;
+            RegDst = 0;
             ALUSrc = 1;
-            MemtoReg = 1'bx;
+            MemtoReg = 0;
             RegWrite = 0;
             MemRead = 0;
             MemWrite = 1;
@@ -68,9 +68,9 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, 
             ALUOp[0] = 0;
             ALUOp[1] = 0;
         end else if (beq) begin
-            RegDst = 1'bx;
+            RegDst = 0;
             ALUSrc = 0;
-            MemtoReg = 1'bx;
+            MemtoReg = 0;
             RegWrite = 0;
             MemRead = 0;
             MemWrite = 0;

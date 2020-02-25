@@ -35,8 +35,8 @@ module cpu(
   logic [31:0] write_data;
   logic [31:0] read_data1;
   logic [31:0] read_data2;
+  logic [4:0] read_register1;
   logic [4:0] read_register2;
-
 
   // CONTROL LOGICS
   logic RegDst, Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite;
@@ -94,7 +94,7 @@ module cpu(
   // ok
   control control_path(instruction[31:26], RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
   // 
-  read_register reading(.enable(read || write), .read_register1(instruction[25:21]), .read_register2(instruction[20:16]), .write_register(write_register), .write_data(write_data), .reg_write(RegWrite), .read_data1(read_data1), .read_data2(read_data2));
+  read_register reading(.read_enable(read), .write_enable(write), .read_register1(instruction[25:21]), .read_register2(instruction[20:16]), .write_register(write_register), .write_data(write_data), .reg_write(RegWrite), .read_data1(read_data1), .read_data2(read_data2));
   
   // ok
   sign_extend sign_extending(.Din(instruction[15:0]), .Dout(extended_instruction));
@@ -118,7 +118,8 @@ module cpu(
     ALU_add_result = left_shifted_signal + pc_add4;
     PCSrc = Branch & Zero;
     read_register2 = instruction[20:16];
-    $display("write data: %b", write_data);
+    read_register1 = instruction[25:21];
+    // $display("mem[24]: %b", write_data);
   end
 
   // update pc value
@@ -163,14 +164,12 @@ module cpu_testbench();
   initial begin
     nreset <= 1; @(posedge clk);
     nreset <= 0; @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
-    @(posedge clk);
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
+    @(posedge clk);@(posedge clk);@(posedge clk);@(posedge clk);
   $stop;
   end
 

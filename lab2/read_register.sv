@@ -3,8 +3,8 @@
 // EE 469 Lab 2
 // reading from the instruction to determine which register to process
 
-module read_register(enable, read_register1, read_register2, write_register, write_data, reg_write, read_data1, read_data2);
-    input logic enable;
+module read_register(read_enable, write_enable, read_register1, read_register2, write_register, write_data, reg_write, read_data1, read_data2);
+    input logic read_enable, write_enable;
     input logic [4:0] read_register1, read_register2, write_register;
     input logic reg_write;
     input logic [31:0] write_data;
@@ -18,20 +18,21 @@ module read_register(enable, read_register1, read_register2, write_register, wri
     end
 
     always_comb begin
-        if (enable) begin
-            if (reg_write) begin
+        if (write_enable) begin
+            if (write_enable && reg_write) begin
                 reg_file[write_register] = write_data;
                 // $display("reg_file[write_data]: %b ", reg_file[write_register]);
             end
-            read_data1 = reg_file[read_register1];
-            //read_data2 = reg_file[read_register2]; 
-
-            read_data2 = reg_file[read_register2]; 
-            $display("r2 addres: %b", read_register2);
-            $display("reg_file[13] inside: %b ", reg_file[13]);
-            $display("reg_file[read_data2] inside: %b ", reg_file[read_register2]);
-            $display("read_data2: %b", read_data2);
         end
+        if (read_enable) begin
+            read_data1 = reg_file[read_register1];
+            read_data2 = reg_file[read_register2]; 
+            // $display("r2 addres: %b", read_register2);
+           
+            // $display("read_data2: %b", read_data2);
+        end
+        $display("reg_file[10]: %b ", reg_file[10]);
+        $display("reg_file[11]: %b ", reg_file[11]);
     end 
 endmodule
 
