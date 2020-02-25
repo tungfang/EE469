@@ -111,12 +111,14 @@ module cpu(
   shifter shift_by2(.Din(extended_instruction), .direction(1'b0), .distance(6'b10), .Dout(left_shifted_signal));
 
   mux2_1 #(32) write_to_reg(.din0(ALU_regular_result), .din1(mem_read_data), .sel(MemtoReg), .mux_out(write_data));
+
+  cpsr_register cpsr(Branch, instruction[31:26], Zero, read_data1, PCSrc);    // CPSR module
   
   // Process pc value and its update here
   always_comb begin
     pc_add4 = pc + 4;
     ALU_add_result = left_shifted_signal + pc_add4;
-    PCSrc = Branch & Zero;
+    // PCSrc = Branch & Zero;
     read_register2 = instruction[20:16];
     read_register1 = instruction[25:21];
     // $display("mem[24]: %b", write_data);
