@@ -22,7 +22,22 @@ module control(instruction, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, 
             lw = 0;
             sw = 1;
             beq = 0;
-        end else if (instruction == 6'b000100) begin
+        end else if (instruction == 6'b000101) begin	//BNE
+            R_format = 0;
+            lw = 0;
+            sw = 0;
+            beq = 1;
+		end else if (instruction == 6'b000100) begin	// BEQ
+            R_format = 0;
+            lw = 0;
+            sw = 0;
+            beq = 1;
+		end else if (instruction == 6'b000110) begin	// BLEZ
+            R_format = 0;
+            lw = 0;
+            sw = 0;
+            beq = 1;
+		end else if (instruction == 6'b000111) begin	// BGTZ
             R_format = 0;
             lw = 0;
             sw = 0;

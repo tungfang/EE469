@@ -1,10 +1,10 @@
-// int add2(int a, int b) {
-//     return a + b;
+// int add1(int a) {
+//     return a + 1;
 // }
 
 // int compare_and_add(int a, int b) {
-//     if (a > b) {
-//         add2(a, b);
+//     if (a != b) {
+//         add1(a, b);
 //     } 
 //     return 0;
 // }

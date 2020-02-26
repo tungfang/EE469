@@ -21,29 +21,29 @@ module fetch_instructions(read_address, enable, instruction);
 
 endmodule
 
-module fetch_instructions_testbench();
-  reg clk;
-  reg [31:0] read_address;
-  reg enable;
-  reg [31:0] instruction;
-  reg [31:0] instruction_memory [0:12];
+// module fetch_instructions_testbench();
+//   reg clk;
+//   reg [31:0] read_address;
+//   reg enable;
+//   reg [31:0] instruction;
+//   reg [31:0] instruction_memory [0:12];
 
-  fetch_instructions dut(instruction_memory, read_address, enable, instruction);
+//   fetch_instructions dut(instruction_memory, read_address, enable, instruction);
 
-  // Set up the clock
-  parameter CLOCK_PERIOD=100;
-	initial begin
-		clk <= 0;
-		forever #(CLOCK_PERIOD/2) clk <= ~clk;
-	end
+//   // Set up the clock
+//   parameter CLOCK_PERIOD=100;
+// 	initial begin
+// 		clk <= 0;
+// 		forever #(CLOCK_PERIOD/2) clk <= ~clk;
+// 	end
 
-  initial begin
-    enable <= 0;       @(posedge clk);
-    enable <= 1;       @(posedge clk);
-    read_address <= 0; @(posedge clk);
-                       @(posedge clk);
-    read_address <= 4; @(posedge clk);
-    @(posedge clk);
-  $stop;
-  end    
-endmodule
+//   initial begin
+//     enable <= 0;       @(posedge clk);
+//     enable <= 1;       @(posedge clk);
+//     read_address <= 0; @(posedge clk);
+//                        @(posedge clk);
+//     read_address <= 4; @(posedge clk);
+//     @(posedge clk);
+//   $stop;
+//   end    
+// endmodule

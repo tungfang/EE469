@@ -1,6 +1,6 @@
 module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (enable, mem_write, mem_read, addr, write_data, read_data);
 
-	`include "constants_32.v"
+	// `include "constants_32.v"
 	input enable;
 	input mem_write, mem_read;
 	input [ADDR_WIDTH - 1:0] addr;
@@ -9,11 +9,12 @@ module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (enab
 
 	reg [31:0] data_mem [0:63];
 
+	
 	// read txt file and store 32 data to data memory (initial to 0)
-	initial begin
-		$readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
-		// $display("Write To DATA MEM");
-	end
+	// initial begin
+	// 	$readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
+	// 	// $display("Write To DATA MEM");
+	// end
 
 	reg [ADDR_WIDTH - 1:0] addr_aligned; // what is this for?
 
