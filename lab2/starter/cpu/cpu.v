@@ -82,7 +82,7 @@ module cpu(
     counter <= counter + 1;
   end
 
-  fetch_instructions fetching(pc, fetch, instruction);
+  fetch_instructions fetching(.read_address(pc), .enable(fetch), .instruction(instruction));
   mux2_1 select_write_register(.din0(instruction[20:16]), .din1(instruction[15:11]), .sel(RegDst), .mux_out(write_register));
   control control_path(instruction[31:26], RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
   read_register reading(.read_enable(read), .write_enable(write), .read_register1(instruction[25:21]), .read_register2(instruction[20:16]), .write_register(write_register), .write_data(write_data), .reg_write(RegWrite), .read_data1(read_data1), .read_data2(read_data2));
@@ -114,10 +114,10 @@ module cpu(
 
   // These are how you communicate back to the serial port debugger.
   assign debug_port1 = pc[7:0];
-  assign debug_port2 = {2'b00, instruction[31:24]};
-  assign debug_port3 = {3'b000, read_register1};
-  assign debug_port4 = {3'b000, read_register2};
-  assign debug_port5 = read_data1[7:0];
-  assign debug_port6 = read_data2[7:0];
+  assign debug_port2 = instruction[31:24];
+  assign debug_port3 = read_register1;
+  assign debug_port4 = read_register2;
+  assign debug_port5 = read_data1;
+  assign debug_port6 = read_data2;
   assign debug_port7 = 8'h07;
 endmodule
