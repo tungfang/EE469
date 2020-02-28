@@ -7,14 +7,15 @@ module fetch_instructions(read_address, enable, instruction);
     input [31:0] read_address;
     input enable;
     output [31:0] instruction;
-    reg [31:0] instruction_memory [0:12];
+    reg [31:0] instruction_memory [0:9];
 
     // read txt file and store inst to instruction
     initial begin
         $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/instruction_memory.txt", instruction_memory);
     end
 
-    // integer i;
+    // assign instruction = enable? instruction_memory[read_address >> 2] : instruction;
+
     always @(*) begin
 	    if (enable) instruction = instruction_memory[read_address >> 2];      
     end

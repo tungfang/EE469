@@ -9,13 +9,13 @@ lastcycle = 0
 
 ## Adjust this number to be the number of debug bytes
 debugbytes = 8
-
+count = 0
 print(ports)
 for port in ports:
     with port:
         wch=0
-        while True:
-
+        while count < 1000:
+            count += 1
 ### Just demonstrate how to write stuff back, if you want
             try:
                 port.write([wch])

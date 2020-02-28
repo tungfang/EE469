@@ -22,14 +22,14 @@ module alu #(parameter DATA_WIDTH = 32)(
             3'b000:     // ALU_AND
             begin
                 alu_mem = bus_a & bus_b;
-                carryout = 1'bX;
-                overflow = 1'bX;
+                carryout = 0;
+                overflow = 0;
             end
             3'b001:     // ALU_OR
             begin
                 alu_mem = bus_a | bus_b;
-                carryout = 1'bX;
-                overflow = 1'bX;
+                carryout = 0;
+                overflow = 0;
             end
             3'b010:     // ALU_ADD
             begin
@@ -45,9 +45,9 @@ module alu #(parameter DATA_WIDTH = 32)(
             end
             default:
             begin
-                out = 'bX;
-                carryout = 1'bX;
-                overflow = 1'bX;
+                out = 0;
+                carryout = 0;
+                overflow = 0;
             end
         endcase 
 

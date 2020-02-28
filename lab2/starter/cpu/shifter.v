@@ -1,14 +1,15 @@
 module shifter(Din, direction, distance, Dout);
     input [31:0] Din;
     input direction; // 0: left; 1: right
-    input [5:0] distance;
+    input [1:0] distance;
     output reg [31:0] Dout;
 
     always @(*) begin
-        if (direction == 0) 
-            Dout = Din << distance;
-        else 
-            Dout = Din >> distance;
+        Dout = Din << distance;
+        // if (direction == 0) 
+        //     Dout = Din << distance;
+        // else 
+        //     Dout = Din >> distance;
     end
 endmodule
 

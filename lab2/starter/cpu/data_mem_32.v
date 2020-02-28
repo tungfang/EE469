@@ -7,13 +7,12 @@ module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (enab
 	input [DATA_WIDTH - 1:0] write_data;
 	output reg [DATA_WIDTH - 1:0] read_data;
 
-	reg [31:0] data_mem [0:63];
+	reg [31:0] data_mem [0:31];
 
 	
 	// read txt file and store 32 data to data memory (initial to 0)
 	// initial begin
 	// 	$readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab2/created_txt/data_memory.txt", data_mem);
-	// 	// $display("Write To DATA MEM");
 	// end
 
 	reg [ADDR_WIDTH - 1:0] addr_aligned; // what is this for?
@@ -28,12 +27,9 @@ module data_mem_32 #(parameter ADDR_WIDTH = 32, parameter DATA_WIDTH = 32) (enab
 			// write
 			if (mem_write) begin
 				data_mem[addr] = write_data;
-				// $display("storing data...");
-				// $display("data_memory[26]: %b", data_mem[26]);
 			end
-			// $display("mem[25]: %b", data_mem[25]);
 		end
-		// $display("mem[24]: %b", data_mem[24]);
+
 	end
 	
 endmodule
