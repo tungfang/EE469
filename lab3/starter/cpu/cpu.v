@@ -100,6 +100,15 @@ module cpu(
   wire [4:0] IDEX_forward_reg2;
   IDEX cache2 (CLOCK, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
+  /* EX: Execute*/
+
+  /* MEM: Memory*/
+
+
+  /* WB: Write Back*/
+  // WB_mux writeback_mux(MEMWB_address, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
+  
+  
   // Controls the LED on the board.
   assign led = 1'b1;
 
