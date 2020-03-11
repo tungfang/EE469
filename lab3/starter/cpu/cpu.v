@@ -51,7 +51,39 @@ module cpu(
   wire control_mux;
   hazard_detection hd (IDEX_memRead, IDEX_write_reg, IFID_PC, IFID_IC, Hazard_IFIDWrite, Hazard_PCWrite, control_mux);
 
-  
+  /* Control Signal */
+  wire [1:0] CONTROL_aluop; // EX
+  wire CONTROL_alusrc; // EX
+  wire CONTROL_isZeroBranch; // M
+  wire CONTROL_isUnconBranch; // M
+  wire CONTROL_memRead; // M
+  wire CONTROL_memwrite; // M
+  wire CONTROL_regwrite; // WB
+  wire CONTROL_mem2reg; // WB  
+  control ctrl (IFID_IC[31:21], CONTROL_aluop, CONTROL_alusrc, CONTROL_isZeroBranch, CONTROL_isUnconBranch, CONTROL_memRead, CONTROL_memwrite, CONTROL_regwrite, CONTROL_mem2reg);
+
+  wire [1:0] CONTROL_aluop_wire; // EX
+  wire CONTROL_alusrc_wire; // EX
+  wire CONTROL_isZeroBranch_wire; // M
+  wire CONTROL_isUnconBranch_wire; // M
+  wire CONTROL_memRead_wire; // M
+  wire CONTROL_memwrite_wire; // M
+  wire CONTROL_regwrite_wire; // WB
+  wire CONTROL_mem2reg_wire; // WB
+  control_Mux ctrl_mux(CONTROL_aluop, CONTROL_alusrc, CONTROL_isZeroBranch, CONTROL_isUnconBranch, CONTROL_memRead, CONTROL_memwrite, CONTROL_regwrite, CONTROL_mem2reg, Control_mux_wire, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire);
+
+  wire [4:0] reg2_wire;
+  ID_Mux decode_mux(IFID_IC[20:16], IFID_IC[4:0], IFID_IC[28], reg2_wire);
+
+  wire [31:0] reg1_data, reg2_data;
+  wire MEMWB_regwrite;
+  wire [4:0] MEMWB_write_reg;
+  wire [31:0] write_reg_data;
+  registers reg_file(clk, IFID_IC[9:5], reg2_wire, MEMWB_write_reg, write_reg_data, MEMWB_regwrite, reg1_data, reg2_data);
+
+  wire [31:0] sign_extend_wire;
+  // SignExtend unit4 (IFID_IC, sign_extend_wire);
+
 
   // Controls the LED on the board.
   assign led = 1'b1;
