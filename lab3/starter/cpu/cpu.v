@@ -25,7 +25,13 @@ module cpu(
   /* Hazard Logics */
   wire Hazard_PCWrite;
   wire Hazard_IFIDWrite;
-  
+
+  /* Data Memory Logics */
+  reg [31:0] mem_data_in;
+  wire [31:0] mem_data_out;
+  wire [31:0] mem_addr;
+  wire control_memwrite_out;
+  wire control_memread_out; 
 
   always @(posedge clk) begin
     if (Hazard_PCWrite !== 1) begin  
@@ -42,8 +48,11 @@ module cpu(
   /* Read from Instruction Memory */
   instruction_memory mem1 (PC, IC);
 
+  /* Read from Data Memory */
+  data_memory mem2(mem_addr, mem_data_in, control_memwrite, control_memread, mem_data_out);
+
   /* IF: Instruction Fetch */
-  IFID cache1(clk, PC, IC);
+  IFID fetch_decode(clk, PC, IC);
 
   /* ID: Instruction Decode */
   wire IDEX_memRead;
@@ -98,7 +107,7 @@ module cpu(
   wire [10:0] IDEX_alu_control;
   wire [4:0] IDEX_forward_reg1;
   wire [4:0] IDEX_forward_reg2;
-  IDEX cache2 (CLOCK, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
+  IDEX decode_execute (CLOCK, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
   /* Execute */
   wire [63:0] left_shifted_wire;
@@ -130,6 +139,16 @@ module cpu(
   wire alu_main_is_zero;
   wire [63:0] alu_main_result;
   ALU main_alu(alu_wire_1, alu_data2_wire, alu_main_control_wire, alu_main_result, alu_main_is_zero);
+
+  /* MEM: Memory */
+  Branch b(EXMEM_isUnconBranch, EXMEM_isZeroBranch, EXMEM_alu_zero, PCSrc);
+
+  wire [31:0] MEMWB_addr;
+  wire [31:0] MEMWB_read_data;
+  MEMWB memory_writeback(clk, mem_address_out, mem_data_in,  EXMEM_write_reg, EXMEM_regwrite, EXMEM_mem2reg, MEMWB_address, MEMWB_read_data, MEMWB_write_reg, MEMWB_regwrite, MEMWB_mem2reg);
+
+  /* WB: Write Back*/
+  WB_Mux writeback_mux(MEMWB_addr, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
 
   // Controls the LED on the board.
   assign led = 1'b1;
