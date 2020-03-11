@@ -110,8 +110,8 @@ module cpu(
   IDEX decode_execute (CLOCK, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
   /* Execute */
-  wire [63:0] left_shifted_wire;
-  wire [63:0] PC_jump;
+  wire [31:0] left_shifted_wire;
+  wire [31:0] PC_jump;
   wire ZERO;
   wire [4:0] EXMEM_write_reg;
   wire EXMEM_regwrite;
@@ -124,21 +124,26 @@ module cpu(
 
   ForwardingUnit forward_u (IDEX_forward_reg1, IDEX_forward_reg2, EXMEM_write_reg, MEMWB_write_reg, EXMEM_regwrite, MEMWB_regwrite, Forward_A, Forward_B);
   
-  wire [63:0] alu_wire_1;
+  wire [31:0] alu_wire_1;
   Forward_ALU_Mux lal1 (IDEX_reg1_data, write_reg_data, mem_address_out, Forward_A, alu_wire_1);
 
-  wire [63:0] alu_wire_2;
+  wire [31:0] alu_wire_2;
   Forward_ALU_Mux lal2 (IDEX_reg2_data, write_reg_data, mem_address_out, Forward_B, alu_wire_2);
 
   wire [3:0] alu_main_control_wire;
   ALU_Control unit7(IDEX_aluop, IDEX_alu_control, alu_main_control_wire);
 
-  wire [63:0] alu_data2_wire;
+  wire [31:0] alu_data2_wire;
   ALU_Mux mux3(alu_wire_2, IDEX_sign_extend, IDEX_alusrc, alu_data2_wire);
 
   wire alu_main_is_zero;
-  wire [63:0] alu_main_result;
+  wire [31:0] alu_main_result;
   ALU main_alu(alu_wire_1, alu_data2_wire, alu_main_control_wire, alu_main_result, alu_main_is_zero);
+
+  wire EXMEM_alu_zero;
+  wire EXMEM_isZeroBranch;
+  wire EXMEM_isUnconBranch;
+  EXMEM cache3(clk, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, PC_jump, alu_main_is_zero, alu_main_result, IDEX_reg2_data, IDEX_write_reg, EXMEM_isZeroBranch, EXMEM_isUnconBranch, control_memread_out, control_memwrite_out, EXMEM_regwrite, EXMEM_mem2reg, jump_PC, EXMEM_alu_zero, mem_address_out, mem_data_out, EXMEM_write_reg);
 
   /* MEM: Memory */
   Branch b(EXMEM_isUnconBranch, EXMEM_isZeroBranch, EXMEM_alu_zero, PCSrc);
@@ -154,7 +159,7 @@ module cpu(
   assign led = 1'b1;
 
   // These are how you communicate back to the serial port debugger.
-  assign debug_port1 = 8'h01;
+  assign debug_port1 = 8'h01; 
   assign debug_port2 = 8'h02;
   assign debug_port3 = 8'h03;
   assign debug_port4 = 8'h04;

@@ -1,8 +1,8 @@
 module ALU (
-  input [63:0] Bus_A,
-  input [63:0] Bus_B,
+  input [31:0] Bus_A,
+  input [31:0] Bus_B,
   input [3:0] control,
-  output reg [63:0] out,
+  output reg [31:0] out,
   output reg ZERO
 );
   always @(*) begin
@@ -13,7 +13,7 @@ module ALU (
       4'b0110 : out = Bus_A - Bus_B;
       4'b0111 : out = Bus_B;
       4'b1100 : out = ~(Bus_A | Bus_B);
-      default : out = 64'hxxxxxxxx;
+      default : out = 31'hxxxx;
     endcase
 
     if (out == 0) begin
