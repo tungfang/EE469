@@ -84,6 +84,21 @@ module cpu(
   wire [31:0] sign_extend_wire;
   // SignExtend unit4 (IFID_IC, sign_extend_wire);
 
+  wire [1:0] IDEX_aluop;
+  wire IDEX_alusrc;
+  wire IDEX_isZeroBranch;
+  wire IDEX_isUnconBranch;
+  wire IDEX_memwrite;
+  wire IDEX_regwrite;
+  wire IDEX_mem2reg;
+  wire [31:0] IDEX_reg1_data;
+  wire [31:0] IDEX_reg2_data;
+  wire [31:0] IDEX_PC;
+  wire [31:0] IDEX_sign_extend;
+  wire [10:0] IDEX_alu_control;
+  wire [4:0] IDEX_forward_reg1;
+  wire [4:0] IDEX_forward_reg2;
+  IDEX cache2 (CLOCK, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
   // Controls the LED on the board.
   assign led = 1'b1;
