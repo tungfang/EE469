@@ -100,15 +100,37 @@ module cpu(
   wire [4:0] IDEX_forward_reg2;
   IDEX cache2 (CLOCK, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
-  /* EX: Execute*/
+  /* Execute */
+  wire [63:0] left_shifted_wire;
+  wire [63:0] PC_jump;
+  wire ZERO;
+  wire [4:0] EXMEM_write_reg;
+  wire EXMEM_regwrite;
+  wire EXMEM_mem2reg;
+  wire [1:0] Forward_A;
+  wire [1:0] Forward_B;
 
-  /* MEM: Memory*/
+  LeftShifter left_shift (IDEX_sign_extend, left_shifted_wire);
+  ALU alu1 (INDEX_PC, left_shifted_wire, 4'b0010, PC_jump, ZERO);
 
-
-  /* WB: Write Back*/
-  // WB_mux writeback_mux(MEMWB_address, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
+  ForwardingUnit forward_u (IDEX_forward_reg1, IDEX_forward_reg2, EXMEM_write_reg, MEMWB_write_reg, EXMEM_regwrite, MEMWB_regwrite, Forward_A, Forward_B);
   
-  
+  wire [63:0] alu_wire_1;
+  Forward_ALU_Mux lal1 (IDEX_reg1_data, write_reg_data, mem_address_out, Forward_A, alu_wire_1);
+
+  wire [63:0] alu_wire_2;
+  Forward_ALU_Mux lal2 (IDEX_reg2_data, write_reg_data, mem_address_out, Forward_B, alu_wire_2);
+
+  wire [3:0] alu_main_control_wire;
+  ALU_Control unit7(IDEX_aluop, IDEX_alu_control, alu_main_control_wire);
+
+  wire [63:0] alu_data2_wire;
+  ALU_Mux mux3(alu_wire_2, IDEX_sign_extend, IDEX_alusrc, alu_data2_wire);
+
+  wire alu_main_is_zero;
+  wire [63:0] alu_main_result;
+  ALU main_alu(alu_wire_1, alu_data2_wire, alu_main_control_wire, alu_main_result, alu_main_is_zero);
+
   // Controls the LED on the board.
   assign led = 1'b1;
 
