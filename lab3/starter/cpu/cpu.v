@@ -16,7 +16,7 @@ module cpu(
 
   /* PC and Instruction Logics*/
   reg [31:0] PC = 0;
-  reg [31:0] IC;
+  wire [31:0] IC;
   wire [31:0] jump_PC;
   wire [31:0] IFID_PC; // pipeline pc
   wire [31:0] IFID_IC; // pipeline instruction counter
