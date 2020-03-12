@@ -49,7 +49,7 @@ module cpu(
   instruction_memory mem1 (PC, IC);
 
   /* Read from Data Memory */
-  data_memory mem2(mem_addr, mem_data_in, control_memwrite, control_memread, mem_data_out);
+  data_memory mem2(mem_addr, mem_data_in, control_memwrite_out, control_memread_out, mem_data_out);
 
   /* IF: Instruction Fetch */
   IFID fetch_decode(clk, PC, IC);
