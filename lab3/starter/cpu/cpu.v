@@ -120,7 +120,7 @@ module cpu(
   wire [1:0] Forward_B;
 
   Left_Shifter left_shift (IDEX_sign_extend, left_shifted_wire);
-  ALU alu1 (INDEX_PC, left_shifted_wire, 4'b0010, PC_jump, ZERO);
+  ALU alu1 (IDEX_PC, left_shifted_wire, 4'b0010, PC_jump, ZERO);
 
   ForwardingUnit forward_u (IDEX_forward_reg1, IDEX_forward_reg2, EXMEM_write_reg, MEMWB_write_reg, EXMEM_regwrite, MEMWB_regwrite, Forward_A, Forward_B);
   
