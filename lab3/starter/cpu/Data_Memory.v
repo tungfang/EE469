@@ -11,7 +11,7 @@ module Data_Memory
 
 	initial begin
 		for (initCount = 0; initCount < 32; initCount = initCount + 1) begin
-			Data[initCount] = initCount * 5;
+			Data[initCount] = initCount * 2;
 		end
 	end
 	always @(*) begin
@@ -24,9 +24,9 @@ module Data_Memory
       end
 
       // Debug use only
-        for (initCount = 0; initCount < 32; initCount = initCount + 1) begin
-            $display("RAM[%0d] = %0d", initCount, Data[initCount]);
-        end
+        // for (initCount = 0; initCount < 32; initCount = initCount + 1) begin
+        //     $display("RAM[%0d] = %0d", initCount, Data[initCount]);
+        // end
 
     end
 endmodule

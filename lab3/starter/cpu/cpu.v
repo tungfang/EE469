@@ -176,20 +176,20 @@ module cpu(
     assign led = 1'b1;
 
     // These are how you communicate back to the serial port debugger.
-    // assign debug_port1 = PC; 
-    // assign debug_port2 = Instruction;
-    // assign debug_port3 = IFID_IC[9:5];
-    // assign debug_port4 = reg1_data;
-    // assign debug_port5 = reg2_addr;
-    // assign debug_port6 = reg2_data;
-    // assign debug_port7 = PCSrc;
-    assign debug_port1 = 0; 
-    assign debug_port2 = 0;
-    assign debug_port3 = 0;
-    assign debug_port4 = 0;
-    assign debug_port5 = 0;
-    assign debug_port6 = 0;
-    assign debug_port7 = Forward_A;
+    assign debug_port1 = PC; 
+    assign debug_port2 = Instruction;
+    assign debug_port3 = IFID_IC[9:5];
+    assign debug_port4 = reg1_data;
+    assign debug_port5 = reg2_addr;
+    assign debug_port6 = reg2_data;
+    assign debug_port7 = PCSrc;
+    // assign debug_port1 = 0; 
+    // assign debug_port2 = 0;
+    // assign debug_port3 = 0;
+    // assign debug_port4 = 0;
+    // assign debug_port5 = 0;
+    // assign debug_port6 = 0;
+    // assign debug_port7 = 0;
 endmodule
 
 /*

@@ -1,20 +1,20 @@
 module SignExtend
 (
   input [31:0] inputInstruction,
-  output reg [63:0] outImmediate
+  output reg [63:0] out
 );
   always @(inputInstruction) begin
     if (inputInstruction[31:26] == 6'b000101) begin // B
-        outImmediate[25:0] = inputInstruction[25:0];
-        outImmediate[63:26] = {64{outImmediate[25]}};
+        out[25:0] = inputInstruction[25:0];
+        out[63:26] = {64{out[25]}};
 
     end else if (inputInstruction[31:24] == 8'b10110100) begin // CBZ
-        outImmediate[19:0] = inputInstruction[23:5];
-        outImmediate[63:20] = {64{outImmediate[19]}};
+        out[19:0] = inputInstruction[23:5];
+        out[63:20] = {64{out[19]}};
 
     end else begin // D Type, ignored if R type
-        outImmediate[9:0] = inputInstruction[20:12];
-        outImmediate[63:10] = {64{outImmediate[9]}};
+        out[9:0] = inputInstruction[20:12];
+        out[63:10] = {64{out[9]}};
     end
   end
 endmodule
