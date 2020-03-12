@@ -17,10 +17,10 @@ module EXMEM (
     output reg memwrite_out, 		// M Stage
     output reg regwrite_out,		// WB Stage
     output reg mem2reg_out,		// WB Stage
-    output reg [63:0] shifted_PC_out,
+	output reg [31:0] shifted_PC_out,
     output reg alu_zero_out,
-    output reg [63:0] alu_result_out,
-    output reg [63:0] write_data_mem_out,
+	output reg [31:0] alu_result_out,
+	output reg [31:0] write_data_mem_out,
     output reg [4:0] write_reg_out
 );
 	always @(negedge clk) begin
