@@ -1,6 +1,6 @@
 module IC
 (
-  input [31:0] PC,
+  input [63:0] PC,
     output reg [31:0] instruction
 );
 
