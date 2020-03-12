@@ -4,10 +4,10 @@ module registers
     input [4:0] read1,
     input [4:0] read2,
     input [4:0] writeReg,
-    input [63:0] writeData,
+    input [31:0] writeData,
     input CONTROL_REGWRITE,
-    output reg [63:0] data1,
-    output reg [63:0] data2
+    output reg [31:0] data1,
+    output reg [31:0] data2
 );
     reg [31:0] Data[31:0];
     integer initCount;
@@ -40,10 +40,10 @@ module register_testbench();
     reg [4:0] read1;
     reg [4:0] read2;
     reg [4:0] writeReg;
-    reg [63:0] writeData;
+    reg [31:0] writeData;
     reg CONTROL_REGWRITE;
-    wire [63:0] data1;
-    wire [63:0] data2;
+    wire [31:0] data1;
+    wire [31:0] data2;
 
     registers dut(clk, read1, read2, writeReg, writeData, CONTROL_REGWRITE, data1, data2);
 

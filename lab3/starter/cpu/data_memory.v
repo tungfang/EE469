@@ -1,11 +1,11 @@
 module data_memory(
-    input [63:0] inputAddress,
-    input [63:0] inputData,
+    input [31:0] inputAddress,
+    input [31:0] inputData,
     input CONTROL_MemWrite,
     input CONTROL_MemRead,
-    output reg [63:0] outputData
+    output reg [31:0] outputData
 );
-    reg [63:0] Data[31:0];
+    reg [31:0] Data[31:0];
 	integer initCount;
 
 	initial begin
@@ -19,7 +19,7 @@ module data_memory(
       end else if (CONTROL_MemRead == 1'b1) begin
         outputData = Data[inputAddress];
       end else begin
-        outputData = 64'hxxxxxxxx;
+        outputData = 32'hxxxxxxxx;
       end
 
       // Debug use only

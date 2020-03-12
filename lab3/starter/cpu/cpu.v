@@ -29,7 +29,7 @@ module cpu(
   /* Data Memory Logics */
   reg [31:0] mem_data_in;
   wire [31:0] mem_data_out;
-  wire [31:0] mem_addr;
+  wire [31:0] mem_address_out;
   wire control_memwrite_out;
   wire control_memread_out; 
 
@@ -49,10 +49,10 @@ module cpu(
   instruction_memory mem1 (PC, IC);
 
   /* Read from Data Memory */
-  data_memory mem2(mem_addr, mem_data_in, control_memwrite_out, control_memread_out, mem_data_out);
+  data_memory mem2(mem_address_out, mem_data_in, control_memwrite_out, control_memread_out, mem_data_out);
 
   /* IF: Instruction Fetch */
-  IFID fetch_decode(clk, PC, IC);
+  IFID fetch_decode(clk, PC, IC, Hazard_IFIDWrite, IFID_PC, IFID_IC);
 
   /* ID: Instruction Decode */
   wire IDEX_memRead;
@@ -148,12 +148,12 @@ module cpu(
   /* MEM: Memory */
   Branch b(EXMEM_isUnconBranch, EXMEM_isZeroBranch, EXMEM_alu_zero, PCSrc);
 
-  wire [31:0] MEMWB_addr;
+  wire [31:0] MEMWB_address;
   wire [31:0] MEMWB_read_data;
-  MEMWB memory_writeback(clk, mem_address_out, mem_data_in,  EXMEM_write_reg, EXMEM_regwrite, EXMEM_mem2reg, MEMWB_address, MEMWB_read_data, MEMWB_write_reg, MEMWB_regwrite, MEMWB_mem2reg);
+  MEMWB memory_writeback(clk, mem_address_out, mem_data_in, EXMEM_write_reg, EXMEM_regwrite, EXMEM_mem2reg, MEMWB_address, MEMWB_read_data, MEMWB_write_reg, MEMWB_regwrite, MEMWB_mem2reg);
 
   /* WB: Write Back*/
-  WB_mux writeback_mux(MEMWB_addr, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
+  WB_mux writeback_mux(MEMWB_address, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
 
   // Controls the LED on the board.
   assign led = 1'b1;
