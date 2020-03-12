@@ -16,7 +16,7 @@ module WB_Mux
   end
 endmodule
 
-
+/*
 module WB_Mux_testbench();
     reg clk;
     reg [31:0] input1;
@@ -41,3 +41,4 @@ module WB_Mux_testbench();
     $stop;
     end
 endmodule
+*/

@@ -1,28 +1,29 @@
 module HazardDetection
 (
-	input EX_memRead_in,
+	input Ex_memRead,
 	input [4:0] EX_write_reg,
 	input [63:0] ID_PC,
 	input [31:0] ID_IC,
-	output reg IFID_write_out,
-	output reg PC_Write_out,
-	output reg Control_mux_out
+	output reg IFID_write,
+	output reg PC_Write,
+	output reg Ctrl_mux
 );
 	always @(*) begin
-		if (EX_memRead_in == 1'b1 && ((EX_write_reg === ID_IC[9:5]) || (EX_write_reg === ID_IC[20:16]))) begin
-			IFID_write_out <= 1'b1;
-			PC_Write_out <= 1'b1;
-			Control_mux_out <= 1'b1;
+		if (Ex_memRead == 1'b1 && ((EX_write_reg === ID_IC[9:5]) || (EX_write_reg === ID_IC[20:16]))) begin
+			IFID_write <= 1'b1;
+			PC_Write <= 1'b1;
+			Ctrl_mux <= 1'b1;
 
 		end else begin
-			IFID_write_out <= 1'b0;
-			PC_Write_out <= 1'b0;
-			Control_mux_out <= 1'b0;
+			IFID_write <= 1'b0;
+			PC_Write <= 1'b0;
+			Ctrl_mux <= 1'b0;
 		end
 
 	end
 endmodule
 
+/*
 module HazardDetection_testbench();
     reg clk;
     reg EX_memRead;
@@ -50,3 +51,4 @@ module HazardDetection_testbench();
     end
     
 endmodule
+*/

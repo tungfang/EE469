@@ -63,6 +63,7 @@ module IDEX
   end
 endmodule
 
+/*
 module IDEX_testbench();
     reg clk;
     reg [1:0] aluop_in;
@@ -125,3 +126,4 @@ module IDEX_testbench();
     $stop;
     end
 endmodule
+*/

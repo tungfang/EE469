@@ -106,6 +106,7 @@ module ARM_Control
   end
 endmodule
 
+/*
 module ARM_Control_testbench();
     reg clk;
     reg [10:0] instruction;
@@ -141,3 +142,4 @@ module ARM_Control_testbench();
     end
 
 endmodule
+*/

@@ -15,6 +15,7 @@ module IFID
   end
 endmodule
 
+/*
 module IFID_testbench();
     reg clk;
     reg [31:0] PC_in, IC_in;
@@ -40,3 +41,4 @@ module IFID_testbench();
     end
     
 endmodule
+*/

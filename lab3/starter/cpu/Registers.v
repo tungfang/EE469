@@ -35,6 +35,7 @@ module Registers
   end
 endmodule
 
+/*
 module Registers_testbench();
     reg clk;
     reg [4:0] read1;
@@ -62,3 +63,4 @@ module Registers_testbench();
     $stop;
     end
 endmodule
+*/

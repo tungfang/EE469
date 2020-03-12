@@ -55,7 +55,7 @@ module cpu(
     wire CTRL_mem2reg_wire; // WB
 
     /* Registers Logics */
-    wire [4:0] reg2_wire;
+    wire [4:0] reg2_addr;
     wire [63:0] reg1_data, reg2_data;
     wire MEMWB_regwrite;
     wire [4:0] MEMWB_write_reg;
@@ -122,13 +122,13 @@ module cpu(
     
     Control_Mux control_mux(CTRL_aluop, CTRL_alusrc, CTRL_isZeroBranch, CTRL_isUnconBranch, CTRL_memRead, CTRL_memwrite, CTRL_regwrite, CTRL_mem2reg, Control_mux, CTRL_aluop_wire, CTRL_alusrc_wire, CTRL_isZeroBranch_wire, CTRL_isUnconBranch_wire, CTRL_memRead_wire, CTRL_memwrite_wire, CTRL_regwrite_wire, CTRL_mem2reg_wire);
     
-    ID_Mux decode_mux(IFID_IC[20:16], IFID_IC[4:0], IFID_IC[28], reg2_wire);
+    ID_Mux decode_mux(IFID_IC[20:16], IFID_IC[4:0], IFID_IC[28], reg2_addr);
 
-    Registers registers(clk, IFID_IC[9:5], reg2_wire, MEMWB_write_reg, write_reg_data, MEMWB_regwrite, reg1_data, reg2_data);
+    Registers registers(clk, IFID_IC[9:5], reg2_addr, MEMWB_write_reg, write_reg_data, MEMWB_regwrite, reg1_data, reg2_data);
 
     SignExtend sign_extend(IFID_IC, sign_extend_wire);
 
-    IDEX decode_execute(clk, CTRL_aluop_wire, CTRL_alusrc_wire, CTRL_isZeroBranch_wire, CTRL_isUnconBranch_wire, CTRL_memRead_wire, CTRL_memwrite_wire, CTRL_regwrite_wire, CTRL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_wire, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
+    IDEX decode_execute(clk, CTRL_aluop_wire, CTRL_alusrc_wire, CTRL_isZeroBranch_wire, CTRL_isUnconBranch_wire, CTRL_memRead_wire, CTRL_memwrite_wire, CTRL_regwrite_wire, CTRL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_addr, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
 
     /* EX : Execute */
@@ -171,21 +171,28 @@ module cpu(
     /* WB : Writeback */
     WB_Mux writeback_mux(MEMWB_addr, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
 
+    wire [7:0] test = 8'b10101010;
     // Controls the LED on the board.
     assign led = 1'b1;
 
     // These are how you communicate back to the serial port debugger.
-    assign debug_port1 = 8'h01; 
-    assign debug_port2 = 8'h02;
-    assign debug_port3 = 8'h03;
-    assign debug_port4 = 8'h04;
-    assign debug_port5 = 8'h05;
-    assign debug_port6 = 8'h06;
-    assign debug_port7 = 8'h07;
-    
+    // assign debug_port1 = PC; 
+    // assign debug_port2 = Instruction;
+    // assign debug_port3 = IFID_IC[9:5];
+    // assign debug_port4 = reg1_data;
+    // assign debug_port5 = reg2_addr;
+    // assign debug_port6 = reg2_data;
+    // assign debug_port7 = PCSrc;
+    assign debug_port1 = 0; 
+    assign debug_port2 = 0;
+    assign debug_port3 = 0;
+    assign debug_port4 = 0;
+    assign debug_port5 = 0;
+    assign debug_port6 = 0;
+    assign debug_port7 = reg2_addr;
 endmodule
 
-
+/*
 module cpu_testbench();
     reg clk;
     reg nreset;
@@ -219,3 +226,4 @@ module cpu_testbench();
     end
     
 endmodule
+*/

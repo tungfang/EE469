@@ -4,7 +4,7 @@ module IC
     output reg [31:0] instruction
 );
 
-    reg [31:0] instruction_mem [0:9];
+    reg [31:0] instruction_mem [0:7];
 
     initial begin
         $readmemb("C:/Users/ctung/Documents/UW/Winter2020/EE469/lab3/created_txt/instruction_memory.txt", instruction_mem);
@@ -15,6 +15,7 @@ module IC
     end
 endmodule
 
+/*
 module IC_testbench();
     reg clk;
     reg [31:0] PC;
@@ -40,3 +41,4 @@ module IC_testbench();
     end
     
 endmodule
+*/
