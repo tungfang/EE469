@@ -79,7 +79,7 @@ module cpu(
   wire CONTROL_memwrite_wire; // M
   wire CONTROL_regwrite_wire; // WB
   wire CONTROL_mem2reg_wire; // WB
-  control_Mux ctrl_mux(CONTROL_aluop, CONTROL_alusrc, CONTROL_isZeroBranch, CONTROL_isUnconBranch, CONTROL_memRead, CONTROL_memwrite, CONTROL_regwrite, CONTROL_mem2reg, Control_mux_wire, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire);
+  Control_Mux ctrl_mux(CONTROL_aluop, CONTROL_alusrc, CONTROL_isZeroBranch, CONTROL_isUnconBranch, CONTROL_memRead, CONTROL_memwrite, CONTROL_regwrite, CONTROL_mem2reg, Control_mux_wire, CONTROL_aluop_wire, CONTROL_alusrc_wire, CONTROL_isZeroBranch_wire, CONTROL_isUnconBranch_wire, CONTROL_memRead_wire, CONTROL_memwrite_wire, CONTROL_regwrite_wire, CONTROL_mem2reg_wire);
 
   wire [4:0] reg2_wire;
   ID_Mux decode_mux(IFID_IC[20:16], IFID_IC[4:0], IFID_IC[28], reg2_wire);
@@ -119,7 +119,7 @@ module cpu(
   wire [1:0] Forward_A;
   wire [1:0] Forward_B;
 
-  LeftShifter left_shift (IDEX_sign_extend, left_shifted_wire);
+  Left_Shifter left_shift (IDEX_sign_extend, left_shifted_wire);
   ALU alu1 (INDEX_PC, left_shifted_wire, 4'b0010, PC_jump, ZERO);
 
   ForwardingUnit forward_u (IDEX_forward_reg1, IDEX_forward_reg2, EXMEM_write_reg, MEMWB_write_reg, EXMEM_regwrite, MEMWB_regwrite, Forward_A, Forward_B);
@@ -153,7 +153,7 @@ module cpu(
   MEMWB memory_writeback(clk, mem_address_out, mem_data_in,  EXMEM_write_reg, EXMEM_regwrite, EXMEM_mem2reg, MEMWB_address, MEMWB_read_data, MEMWB_write_reg, MEMWB_regwrite, MEMWB_mem2reg);
 
   /* WB: Write Back*/
-  WB_Mux writeback_mux(MEMWB_addr, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
+  WB_mux writeback_mux(MEMWB_addr, MEMWB_read_data, MEMWB_mem2reg, write_reg_data);
 
   // Controls the LED on the board.
   assign led = 1'b1;
@@ -166,5 +166,40 @@ module cpu(
   assign debug_port5 = 8'h05;
   assign debug_port6 = 8'h06;
   assign debug_port7 = 8'h07;
+    
+endmodule
+
+
+module cpu_testbench();
+  reg clk;
+  reg nreset;
+  wire led;
+  wire [7:0] debug_port1;
+  wire [7:0] debug_port2;
+  wire [7:0] debug_port3;
+  wire [7:0] debug_port4;
+  wire [7:0] debug_port5;
+  wire [7:0] debug_port6;
+  wire [7:0] debug_port7;
+
+    cpu dut(clk, nreset, led, debug_port1, debug_port2, debug_port3, debug_port4, debug_port5, debug_port6, debug_port7);
+
+    // set up the clock 
+    parameter CLOCK_PERIOD=100;
+    initial begin
+        clk = 0;
+        forever #(CLOCK_PERIOD/2) clk <= ~clk;
+    end
+
+
+    initial begin
+        nreset = 0; @(posedge clk);
+        nreset = 1; @(posedge clk); @(posedge clk); @(posedge clk);
+        nreset = 0; @(posedge clk);
+        @(posedge clk); @(posedge clk); @(posedge clk);@(posedge clk); @(posedge clk); @(posedge clk);
+        @(posedge clk); @(posedge clk); @(posedge clk);@(posedge clk); @(posedge clk); @(posedge clk);
+        @(posedge clk); @(posedge clk); @(posedge clk);@(posedge clk); @(posedge clk); @(posedge clk);
+    $stop;
+    end
     
 endmodule
