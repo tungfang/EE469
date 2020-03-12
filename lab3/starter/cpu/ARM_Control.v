@@ -105,3 +105,39 @@ module ARM_Control
     end
   end
 endmodule
+
+module ARM_Control_testbench();
+    reg clk;
+    reg [10:0] instruction;
+    wire [1:0] control_aluop;
+    wire control_alusrc;
+    wire control_isZeroBranch;
+    wire control_isUnconBranch;
+    wire control_memRead;
+    wire control_memwrite;
+    wire control_regwrite;
+    wire control_mem2reg;
+
+    ARM_Control dut(instruction, control_aluop, control_alusrc, control_isZeroBranch,control_isUnconBranch, control_memRead, control_memwrite, control_regwrite, control_mem2reg);
+
+    // set up the clock 
+    parameter CLOCK_PERIOD=100;
+    initial begin
+        clk = 0;
+        forever #(CLOCK_PERIOD/2) clk <= ~clk;
+    end
+
+    initial begin
+        instruction <= 11'b10001010000; @(posedge clk); // R-format
+        @(posedge clk); @(posedge clk); @(posedge clk);
+        instruction <= 11'b11111000010; @(posedge clk); // LDUR
+        @(posedge clk); @(posedge clk); @(posedge clk);
+        instruction <= 11'b11111000000; @(posedge clk); // STUR
+        @(posedge clk); @(posedge clk); @(posedge clk);
+        instruction <= 11'b10110100000; @(posedge clk); // CBZ
+        @(posedge clk); @(posedge clk); @(posedge clk);
+        
+    $stop;
+    end
+
+endmodule
