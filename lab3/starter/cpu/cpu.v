@@ -189,7 +189,7 @@ module cpu(
     assign debug_port4 = 0;
     assign debug_port5 = 0;
     assign debug_port6 = 0;
-    assign debug_port7 = reg2_addr;
+    assign debug_port7 = Forward_A;
 endmodule
 
 /*
