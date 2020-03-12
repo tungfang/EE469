@@ -57,8 +57,8 @@ module cpu(
   /* ID: Instruction Decode */
   wire IDEX_memRead;
   wire [4:0] IDEX_write_reg;
-  wire control_mux;
-  hazard_detection hd (IDEX_memRead, IDEX_write_reg, IFID_PC, IFID_IC, Hazard_IFIDWrite, Hazard_PCWrite, control_mux);
+  wire Control_mux_wire;
+  HazardDetection hd (IDEX_memRead, IDEX_write_reg, IFID_PC, IFID_IC, Hazard_IFIDWrite, Hazard_PCWrite, Control_mux_wire);
 
   /* Control Signal */
   wire [1:0] CONTROL_aluop; // EX

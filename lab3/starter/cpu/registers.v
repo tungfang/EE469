@@ -30,7 +30,7 @@ module registers
 
         // Debug use only
         for (initCount = 0; initCount < 32; initCount = initCount + 1) begin
-            $display("REGISTER[%0d] = %0d", initCount, Data[initCount]);
+            // $display("REGISTER[%0d] = %0d", initCount, Data[initCount]);
         end
     end
 endmodule

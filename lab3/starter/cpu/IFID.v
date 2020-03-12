@@ -6,8 +6,9 @@ module IFID(
     output reg [31:0] PC_out,
     output reg [31:0] IC_out
 );
-
+    
     always @(posedge clk) begin
+        // $display("IFID entered, Hazard_in = %b", Hazard_in);
         if (Hazard_in != 1) begin
             PC_out <= PC_in;
             IC_out <= IC_in;

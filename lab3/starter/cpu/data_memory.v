@@ -24,7 +24,7 @@ module data_memory(
 
       // Debug use only
         for (initCount = 0; initCount < 32; initCount = initCount + 1) begin
-            $display("RAM[%0d] = %0d", initCount, Data[initCount]);
+            // $display("RAM[%0d] = %0d", initCount, Data[initCount]);
         end
 
     end
