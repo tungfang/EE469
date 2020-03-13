@@ -25,17 +25,17 @@ module EXMEM
   output reg [4:0] write_reg_out
 );
 	always @(negedge clk) begin
-		/* Values for M */
+		/* M */
 		isZeroBranch_out <= isZeroBranch_in;
 		isUnconBranch_out <= isUnconBranch_in;
 		memRead_out <= memRead_in;
 		memwrite_out <= memwrite_in;
 
-		/* Values for WB */
+		/* WB */
 		regwrite_out <= regwrite_in;
 		mem2reg_out <= mem2reg_in;
 
-		/* Values for all Stages */
+		/* all Stages */
 		shifted_PC_out <= shifted_PC_in;
 		alu_zero_out <= alu_zero_in;
 		alu_result_out <= alu_result_in;
