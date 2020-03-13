@@ -1,28 +1,28 @@
 module ALU
 (
-  input [63:0] A,
-  input [63:0] B,
+  input [63:0] Bus_A,
+  input [63:0] Bus_B,
   input [3:0] CONTROL,
-  output reg [63:0] RESULT,
-  output reg ZEROFLAG
+  output reg [63:0] out,
+  output reg ZERO
 );
   always @(*) begin
     case (CONTROL)
-      4'b0000 : RESULT = A & B;
-      4'b0001 : RESULT = A | B;
-      4'b0010 : RESULT = A + B;
-      4'b0110 : RESULT = A - B;
-      4'b0111 : RESULT = B;
-      4'b1100 : RESULT = ~(A | B);
-      default : RESULT = 64'hxxxxxxxx;
+      4'b0000 : out = Bus_A & Bus_B;
+      4'b0001 : out = Bus_A | Bus_B;
+      4'b0010 : out = Bus_A + Bus_B;
+      4'b0110 : out = Bus_A - Bus_B;
+      4'b0111 : out = Bus_B;
+      4'b1100 : out = ~(Bus_A | Bus_B);
+      default : out = 64'hxxxxxxxx;
     endcase
 
-    if (RESULT == 0) begin
-      ZEROFLAG = 1'b1;
-    end else if (RESULT != 0) begin
-      ZEROFLAG = 1'b0;
+    if (out == 0) begin
+      ZERO = 1'b1;
+    end else if (out != 0) begin
+      ZERO = 1'b0;
     end else begin
-      ZEROFLAG = 1'bx;
+      ZERO = 1'bx;
     end
   end
 endmodule

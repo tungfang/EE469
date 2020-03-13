@@ -75,13 +75,13 @@ module cpu(
     wire [63:0] IDEX_reg1_data;
     wire [63:0] IDEX_reg2_data;
     wire [63:0] IDEX_PC;
-    wire [63:0] IDEX_sign_extend;
+    wire [63:0] sign_extended;
     wire [10:0] IDEX_alu_control;
     wire [4:0] IDEX_forward_reg1;
     wire [4:0] IDEX_forward_reg2;
 
     /* Execute Logics */
-    wire [63:0] shift_left_wire;
+    wire [63:0] left_shifted;
     wire [63:0] jump_PC;
     wire jump_is_zero;
     wire [4:0] EXMEM_write_reg;
@@ -128,27 +128,26 @@ module cpu(
 
     SignExtend sign_extend(IFID_IC, sign_extend_wire);
 
-    IDEX decode_execute(clk, CTRL_aluop_wire, CTRL_alusrc_wire, CTRL_isZeroBranch_wire, CTRL_isUnconBranch_wire, CTRL_memRead_wire, CTRL_memwrite_wire, CTRL_regwrite_wire, CTRL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_addr, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, IDEX_sign_extend, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
+    IDEX decode_execute(clk, CTRL_aluop_wire, CTRL_alusrc_wire, CTRL_isZeroBranch_wire, CTRL_isUnconBranch_wire, CTRL_memRead_wire, CTRL_memwrite_wire, CTRL_regwrite_wire, CTRL_mem2reg_wire, IFID_PC, reg1_data, reg2_data, sign_extend_wire, IFID_IC[31:21], IFID_IC[4:0], IFID_IC[9:5], reg2_addr, IDEX_aluop, IDEX_alusrc, IDEX_isZeroBranch, IDEX_isUnconBranch, IDEX_memRead, IDEX_memwrite, IDEX_regwrite, IDEX_mem2reg, IDEX_PC, IDEX_reg1_data, IDEX_reg2_data, sign_extended, IDEX_alu_control, IDEX_write_reg, IDEX_forward_reg1, IDEX_forward_reg2);
 
 
     /* EX : Execute */
-    Shift_Left shift_left(IDEX_sign_extend, shift_left_wire);
+    Shift_Left shift_left(sign_extended, left_shifted);
     
-    ALU alu(IDEX_PC, shift_left_wire, 4'b0010, jump_PC, jump_is_zero);
+    ALU alu(IDEX_PC, left_shifted, 4'b0010, jump_PC, jump_is_zero);
 
     ForwardingUnit forward(IDEX_forward_reg1, IDEX_forward_reg2, EXMEM_write_reg, MEMWB_write_reg, EXMEM_regwrite, MEMWB_regwrite, Forward_A, Forward_B);
 
     wire [63:0] alu_1_wire;
-    Forward_ALU_Mux FAM1(IDEX_reg1_data, write_reg_data, mem_addr, Forward_A, alu_1_wire);
-
     wire [63:0] alu_2_wire;
+    Forward_ALU_Mux FAM1(IDEX_reg1_data, write_reg_data, mem_addr, Forward_A, alu_1_wire);
     Forward_ALU_Mux FAM2(IDEX_reg2_data, write_reg_data, mem_addr, Forward_B, alu_2_wire);
 
     wire [3:0] alu_main_control_wire;
     ALU_Control alu_ctrl(IDEX_aluop, IDEX_alu_control, alu_main_control_wire);
 
     wire [63:0] alu_data2_wire;
-    ALU_Mux alu_mux(alu_2_wire, IDEX_sign_extend, IDEX_alusrc, alu_data2_wire);
+    ALU_Mux alu_mux(alu_2_wire, sign_extended, IDEX_alusrc, alu_data2_wire);
 
     wire alu_main_is_zero;
     wire [63:0] alu_main_result;
